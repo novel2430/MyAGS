@@ -29,16 +29,64 @@ function SysTray() {
     </box>
 }
 
-function BatteryLevel() {
-    const bat = Battery.get_default()
+function BatteryItem(props: { bat: typeof Battery.AstalBatteryDevice }) {
+    const { bat } = props;
+    const chargingStateBinding = bind(bat, "charging");
+    const percentageBinding = bind(bat, "percentage");
+
+    function updateLevel() {
+      let icon = "󰁹";
+      let per = Math.floor(bat.percentage * 100);
+      if( bat.charging == false) {
+        if(per >= 90) icon = "󰁹";
+        else if(per >= 80) icon = "󰂂";
+        else if(per >= 70) icon = "󰂁";
+        else if(per >= 60) icon = "󰂀";
+        else if(per >= 50) icon = "󰁿";
+        else if(per >= 40) icon = "󰁾";
+        else if(per >= 30) icon = "󰁽";
+        else if(per >= 20) icon = "󰁼";
+        else if(per >= 10) icon = "󰁻";
+        else if(per < 10) icon = "󰂃";
+      }
+      else {
+        if(per >= 90) icon = "󰂅";
+        else if(per >= 80) icon = "󰂋";
+        else if(per >= 70) icon = "󰂊";
+        else if(per >= 60) icon = "󰢞";
+        else if(per >= 50) icon = "󰂉";
+        else if(per >= 40) icon = "󰢝";
+        else if(per >= 30) icon = "󰂈";
+        else if(per >= 20) icon = "󰂇";
+        else if(per >= 10) icon = "󰂆";
+        else if(per < 10) icon = "󰢜";
+      }
+      return `${icon} ${per}%`;
+    }
+
+    function setup(self: Widget.Label) {
+        self.hook(chargingStateBinding, () => {
+          self.toggleClassName("charging", bat.charging)
+          self.set_label(updateLevel())
+        });
+        self.hook(percentageBinding, () => {
+          self.set_label(updateLevel())
+        });
+
+        if(chargingStateBinding.get()) self.toggleClassName("charging", true);
+        self.set_label(updateLevel())
+    }
 
     return <box className="Battery"
         visible={bind(bat, "isPresent")}>
-        <icon icon={bind(bat, "batteryIconName")} />
-        <label label={bind(bat, "percentage").as(p =>
-            `${Math.floor(p * 100)} %`
-        )} />
+        <label setup={setup} />
     </box>
+}
+
+function BatteryLevel() {
+    const bat = Battery.get_default()
+
+    return <BatteryItem bat={bat} />
 }
 
 function TagButton(props: { index: number, tags: number, output: typeof River.Output }) {
@@ -120,7 +168,7 @@ export default function Bar(monitor: Gdk.Monitor) {
             <box>
                 <Time />
             </box>
-            <box hexpand halign={Gtk.Align.END} >
+            <box className="BoxEnd" hexpand halign={Gtk.Align.END} >
                 <BatteryLevel />
                 <SysTray />
             </box>

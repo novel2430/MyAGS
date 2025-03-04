@@ -80,6 +80,17 @@ window.TopBar {
       padding: 2px 20px;
       margin: 0px;
     }
+    
+    .Battery {
+      background: $bg-color;
+      border-radius: $bor-radius;
+      padding: 2px 20px;
+      margin: 0px 10px;
+
+      .charging {
+        color: #8fbcbb
+      }
+    }
 
     >centerbox {
         background: transparent;
