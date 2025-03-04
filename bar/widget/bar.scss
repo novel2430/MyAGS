@@ -74,13 +74,11 @@ window.TopBar {
       margin: 0px;
     }
     .BoxEnd {
-      background: $bg-color;
-      border-radius: $bor-radius;
-      padding-top: 2px;
-      padding-bottom: 2px;
-      padding-left: 10px;
-      margin: 0px;
       .SysTray {
+        border-radius: $bor-radius;
+        background: $high-bg-color;
+        padding: 2px 20px;
+        margin: 0px;
         button {
           font-weight: bold;
           background: transparent;
@@ -94,7 +92,10 @@ window.TopBar {
         }
       }
       .SystemUsage {
-        margin: 0px 10px;
+        border-radius: $bor-radius;
+        background: $bg-color;
+        padding: 2px 20px;
+        margin-right: 10px;
         .Cpu {
           margin: 0px 7px;
         }
