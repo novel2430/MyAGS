@@ -56,55 +56,54 @@ window.TopBar {
       }
     }
 
-    .SysTray {
-      background: $bg-color;
-      border-radius: $bor-radius;
-      padding: 2px 10px;
-      button {
-        font-weight: bold;
-        background: transparent;
-        border-radius: 0px;
-        padding: 0px 5px;
-        margin: 0px 0px;
-
-        &:hover {
-          background: inherit;
-          box-shadow: inset 0 -3px $fg-color;
-        }
-      }
-    }
-
-    .Time {
-      background: $bg-color;
-      border-radius: $bor-radius;
-      padding: 2px 20px;
-      margin: 0px;
-    }
-    
     .Battery {
-      background: $bg-color;
       border-radius: $bor-radius;
+      background: $bg-color;
       padding: 2px 20px;
       margin: 0px 10px;
-
       .charging {
         color: #8fbcbb
       }
     }
 
-    .SystemUsage {
+
+    .Time {
+      border-radius: $bor-radius;
+      background: $bg-color;
+      padding: 2px 20px;
+      margin: 0px;
+    }
+    .BoxEnd {
       background: $bg-color;
       border-radius: $bor-radius;
-      padding: 2px 20px;
-      margin: 0px 10px;
-      .Cpu {
-        margin: 0px 7px;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      padding-left: 10px;
+      margin: 0px;
+      .SysTray {
+        button {
+          font-weight: bold;
+          background: transparent;
+          border-radius: 0px;
+          padding: 0px 2.5px;
+          margin: 0px 0px;
+          &:hover {
+            background: inherit;
+            box-shadow: inset 0 -3px $fg-color;
+          }
+        }
       }
-      .Ram {
-        margin: 0px 7px;
-      }
-      .Temp {
-        margin: 0px 7px;
+      .SystemUsage {
+        margin: 0px 10px;
+        .Cpu {
+          margin: 0px 7px;
+        }
+        .Ram {
+          margin: 0px 7px;
+        }
+        .Temp {
+          margin: 0px 7px;
+        }
       }
     }
 

@@ -85,7 +85,7 @@ function SystemUsage() {
             }
             const data = exec(SystemUsage.cpuTempCmd).toString();
             const tempCelsius = (parseInt(data) / 1000).toFixed(0);
-            return `${tempCelsius}°C`;
+            return `${tempCelsius}`;
         } catch (e) {
             return "N/A";
         }
@@ -233,12 +233,12 @@ export default function Bar(monitor: Gdk.Monitor) {
         <centerbox>
             <box hexpand halign={Gtk.Align.START}>
                 <RiverTags monitor={monitor}/>
+                <BatteryLevel />
             </box>
             <box>
                 <Time />
             </box>
             <box className="BoxEnd" hexpand halign={Gtk.Align.END} >
-                <BatteryLevel />
                 <SystemUsage />
                 <SysTray />
             </box>
