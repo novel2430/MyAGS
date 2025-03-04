@@ -1,0 +1,33 @@
+$fg-color: #eceff4;
+$bg-color: #2e3440;
+
+window.OSD {
+
+    font-family: "Hack Nerd Font";
+    
+    box.OSD {
+        border-radius: 20px;
+        background-color: $bg-color;
+        padding: 13px 16px;
+        margin: 13px;
+        box-shadow: 3px 3px 7px 0 rgba(0,0,0,.4);
+    }
+
+    icon {
+        font-size: 15px;
+    }
+
+    label {
+        font-size: 15px;
+    }
+
+    levelbar {
+        trough {
+            margin: 1 .6rem;
+        }
+
+        block {
+            min-height: 15px;
+        }
+    }
+}

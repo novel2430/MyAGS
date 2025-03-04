@@ -1,5 +1,5 @@
 import { App } from "astal/gtk3"
-import { Variable, GLib, bind, exec, merge } from "astal"
+import { Variable, GLib, bind, exec } from "astal"
 import { Astal, Gtk, Gdk } from "astal/gtk3"
 import River from "gi://AstalRiver"
 import Mpris from "gi://AstalMpris"
