@@ -1,5 +1,5 @@
 import { App } from "astal/gtk3"
-import { Variable, GLib, bind, exec } from "astal"
+import { Variable, GLib, bind, exec, execAsync } from "astal"
 import { Astal, Gtk, Gdk } from "astal/gtk3"
 import River from "gi://AstalRiver"
 import Mpris from "gi://AstalMpris"
@@ -27,6 +27,75 @@ function SysTray() {
             </menubutton>
         )))}
     </box>
+}
+
+function SystemUsage() {
+    const cpu_cmd = `bash -c "cat /proc/stat | grep 'cpu '"`
+    const ram_cmd = `bash -c "cat /proc/meminfo | grep 'Mem'"`
+    const cpu_temp_dir_1 = "/sys/class/thermal/thermal_zone0/temp"
+    const cpu_temp_dir_2 = "/sys/class/hwmon/hwmon1/temp1_input"
+    const interval = 2000
+    const cpuUsage = Variable<string>("0%").poll(interval, () => {
+        try {
+            const data = exec(cpu_cmd).toString();
+            const values = data.split(" ").filter(v => v).slice(1, 8).map(Number);
+            const idle = values[3];
+            const total = values.reduce((a, b) => a + b, 0);
+
+            if (!SystemUsage.lastIdle || !SystemUsage.lastTotal) {
+                SystemUsage.lastIdle = idle;
+                SystemUsage.lastTotal = total;
+                return "0%";
+            }
+
+            const idleDiff = idle - SystemUsage.lastIdle;
+            const totalDiff = total - SystemUsage.lastTotal;
+            SystemUsage.lastIdle = idle;
+            SystemUsage.lastTotal = total;
+
+            const usage = 100 * (1 - idleDiff / totalDiff);
+            return `${usage.toFixed(0)}%`;
+        } catch (e) {
+            return "N/A";
+        }
+    });
+
+    const ramUsage = Variable<string>("0%").poll(interval, () => {
+        try {
+            const data = exec(ram_cmd).toString();
+            const lines = data.split("\n").map(line => line.split(/\s+/));
+
+            const memTotal = Number(lines.find(l => l[0] === "MemTotal:")?.[1] || 1);
+            const memAvailable = Number(lines.find(l => l[0] === "MemAvailable:")?.[1] || 0);
+
+            const usedPercent = 100 * (1 - memAvailable / memTotal);
+            return `${usedPercent.toFixed(0)}%`;
+        } catch (e) {
+            return "N/A";
+        }
+    });
+
+    const tempUsage = Variable<string>("0%").poll(interval, () => {
+        try {
+            if(!SystemUsage.cpuTempCmd) {
+              SystemUsage.cpuTempCmd = `bash -c "cat ${cpu_temp_dir_1}"`
+              if(GLib.file_test(cpu_temp_dir_1, GLib.FileTest.EXISTS) == false) {
+                SystemUsage.cpuTempCmd = `bash -c "cat ${cpu_temp_dir_2}"`
+              }
+            }
+            const data = exec(SystemUsage.cpuTempCmd).toString();
+            const tempCelsius = (parseInt(data) / 1000).toFixed(0);
+            return `${tempCelsius}°C`;
+        } catch (e) {
+            return "N/A";
+        }
+    });
+
+    return <box className="SystemUsage">
+        <label className="Cpu" label={bind(cpuUsage, "value").as(cpu => ` ${cpu}`)} />
+        <label className="Ram" label={bind(ramUsage, "value").as(ram => ` ${ram}`)} />
+        <label className="Temp" label={bind(tempUsage, "value").as(temp => ` ${temp}`)} />
+    </box>;
 }
 
 function BatteryItem(props: { bat: typeof Battery.AstalBatteryDevice }) {
@@ -170,6 +239,7 @@ export default function Bar(monitor: Gdk.Monitor) {
             </box>
             <box className="BoxEnd" hexpand halign={Gtk.Align.END} >
                 <BatteryLevel />
+                <SystemUsage />
                 <SysTray />
             </box>
         </centerbox>

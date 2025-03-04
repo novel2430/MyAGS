@@ -92,6 +92,22 @@ window.TopBar {
       }
     }
 
+    .SystemUsage {
+      background: $bg-color;
+      border-radius: $bor-radius;
+      padding: 2px 20px;
+      margin: 0px 10px;
+      .Cpu {
+        margin: 0px 7px;
+      }
+      .Ram {
+        margin: 0px 7px;
+      }
+      .Temp {
+        margin: 0px 7px;
+      }
+    }
+
     >centerbox {
         background: transparent;
         margin-left: 8px;
