@@ -39,7 +39,7 @@ function SysTray() {
 
     return <box className="SysTray">
         {
-          bind(tray, "items").as(f => tray.get_items().map(item => <TrayItem item={item}/>))
+          bind(tray, "items").as(items => items.map(item => <TrayItem item={item}/>))
         }
     </box>
 }

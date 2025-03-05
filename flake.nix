@@ -26,8 +26,6 @@
       ];
 
       buildInputs = with astal.packages.${system}; [
-        pkgs.libdbusmenu-gtk3
-
         astal3
         io
         # any other package
