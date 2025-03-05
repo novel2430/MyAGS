@@ -13,19 +13,34 @@ type Props = {
   monitor: Gdk.Monitor
 }
 
+function TrayItem(props: { item: typeof Tray.TrayItem }) {
+  const { item } = props
+  const interval = 5000
+  const visibleFlag = Variable<boolean>(true).poll(interval, () => {
+    if(item.id)
+      return true
+    else
+      return false
+  })
+  return (
+    <menubutton
+        visible={bind(visibleFlag, "value")}
+        tooltipMarkup={bind(item, "tooltipMarkup")}
+        usePopover={false}
+        actionGroup={bind(item, "actionGroup").as(ag => ["dbusmenu", ag])}
+        menuModel={bind(item, "menuModel")}>
+        <icon gicon={bind(item, "gicon")} />
+    </menubutton>
+  )
+}
+
 function SysTray() {
     const tray = Tray.get_default()
 
     return <box className="SysTray">
-        {bind(tray, "items").as(items => items.map(item => (
-            <menubutton
-                tooltipMarkup={bind(item, "tooltipMarkup")}
-                usePopover={false}
-                actionGroup={bind(item, "actionGroup").as(ag => ["dbusmenu", ag])}
-                menuModel={bind(item, "menuModel")}>
-                <icon gicon={bind(item, "gicon")} />
-            </menubutton>
-        )))}
+        {
+          bind(tray, "items").as(f => tray.get_items().map(item => <TrayItem item={item}/>))
+        }
     </box>
 }
 
