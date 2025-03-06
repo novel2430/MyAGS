@@ -39,7 +39,10 @@ function SysTray() {
 
     return <box className="SysTray">
         {
-          bind(tray, "items").as(items => items.map(item => <TrayItem item={item}/>))
+          bind(tray, "items").as(items => {
+            const filterItems = items.filter(item => item.id !== null && item.menuModel !== null);
+            return filterItems.map(item => <TrayItem item={item}/>)
+          })
         }
     </box>
 }

@@ -78,6 +78,9 @@ eventbox.Notification {
             min-width: 0;
             min-height: 0;
             background-color: $high-bg-color;
+            &:hover {
+              background-color: gtkalpha($high-bg-color, .8);
+            }
         }
     }
 
@@ -113,10 +116,11 @@ eventbox.Notification {
     .actions {
         margin: 1rem;
         margin-top: 0;
+        background-color: transparent;
         
-        background-color: $high-bg-color;
 
         button {
+            background-color: $high-bg-color;
             margin: 0 .3rem;
 
             &:first-child {
@@ -125,6 +129,10 @@ eventbox.Notification {
 
             &:last-child {
                 margin-right: 0;
+            }
+
+            &:hover {
+              background-color: gtkalpha($high-bg-color, .8);
             }
         }
     }

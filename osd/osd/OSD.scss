@@ -1,33 +1,37 @@
+@use "sass:string";
+@function gtkalpha($c, $a) {
+    @return string.unquote("alpha(#{$c},#{$a})");
+}
 $fg-color: #eceff4;
 $bg-color: #2e3440;
+$high-bg-color: #6e7275;
 
 window.OSD {
 
     font-family: "Hack Nerd Font";
     
     box.OSD {
+
         border-radius: 20px;
         background-color: $bg-color;
-        padding: 13px 16px;
+        color: $fg-color;
         margin: 13px;
         box-shadow: 3px 3px 7px 0 rgba(0,0,0,.4);
-    }
 
-    icon {
-        font-size: 15px;
-    }
-
-    label {
-        font-size: 15px;
-    }
-
-    levelbar {
-        trough {
-            margin: 1 .6rem;
+        .OSDBar{
+          border-radius: 20px;
+          background-color: $high-bg-color;
+          min-height: 40px;
         }
 
-        block {
-            min-height: 15px;
+        .OSDIcon {
+          font-size: 1.65em;
+          background-color: transparent;
+          margin: 10px;
+        }
+        .mute {
+          background-color: gtkalpha($high-bg-color, 0.4);
+          color: gtkalpha($fg-color, 0.4);
         }
     }
 }
