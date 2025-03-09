@@ -116,6 +116,53 @@ function SystemUsage() {
     </box>;
 }
 
+function BatteryTimeItem(props: { bat: typeof Battery.AstalBatteryDevice }) {
+    const { bat } = props;
+    const chargingStateBinding = bind(bat, "charging");
+    const emptyBinding = bind(bat, "time_to_empty");
+    const fullBinding = bind(bat, "time_to_full");
+
+    function formatTime(seconds: number): string {
+      if (seconds <= 0 || isNaN(seconds)) {
+        return "0:00"; // Error
+      }
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      return `${hours.toString().padStart(2, "0")}h${minutes.toString().padStart(2, "0")}m`;
+    }
+
+    function update() {
+      if(bat.charging) {
+        return formatTime(bat.time_to_full)
+      }
+      else{
+        return formatTime(bat.time_to_empty)
+      }
+    }
+
+    function setup(self: Widget.Label) {
+        self.hook(chargingStateBinding, () => {
+          self.toggleClassName("charging", bat.charging)
+          self.set_label(update())
+        });
+        self.hook(emptyBinding, () => {
+          self.set_label(update())
+        });
+        self.hook(fullBinding, () => {
+          self.set_label(update())
+        });
+
+        self.toggleClassName("charging", bat.charging)
+        self.set_label(update())
+    }
+
+    return <box className="BatteryTime"
+        visible={bind(bat, "isPresent")}>
+        <label setup={setup} />
+    </box>
+
+}
+
 function BatteryItem(props: { bat: typeof Battery.AstalBatteryDevice }) {
     const { bat } = props;
     const chargingStateBinding = bind(bat, "charging");
@@ -160,11 +207,11 @@ function BatteryItem(props: { bat: typeof Battery.AstalBatteryDevice }) {
           self.set_label(updateLevel())
         });
 
-        if(chargingStateBinding.get()) self.toggleClassName("charging", true);
+        self.toggleClassName("charging", bat.charging)
         self.set_label(updateLevel())
     }
 
-    return <box className="Battery"
+    return <box className="BatteryLevel"
         visible={bind(bat, "isPresent")}>
         <label setup={setup} />
     </box>
@@ -173,7 +220,10 @@ function BatteryItem(props: { bat: typeof Battery.AstalBatteryDevice }) {
 function BatteryLevel() {
     const bat = Battery.get_default()
 
-    return <BatteryItem bat={bat} />
+    return <box className="Battery">
+      <BatteryItem bat={bat} />
+      <BatteryTimeItem bat={bat}/>
+    </box>
 }
 
 function TagButton(props: { index: number, tags: number, output: typeof River.Output }) {
