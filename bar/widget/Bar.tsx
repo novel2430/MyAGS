@@ -223,7 +223,7 @@ function BatteryItem(props: { bat: typeof Battery.AstalBatteryDevice }) {
 function BatteryLevel() {
     const bat = Battery.get_default()
 
-    return <box className="Battery">
+    return <box className="Battery" visible={bind(bat, "isPresent")}>
       <BatteryItem bat={bat} />
       <BatteryTimeItem bat={bat}/>
     </box>
