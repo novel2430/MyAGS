@@ -123,8 +123,8 @@ function BatteryTimeItem(props: { bat: typeof Battery.AstalBatteryDevice }) {
     const fullBinding = bind(bat, "time_to_full");
 
     function formatTime(seconds: number): string {
-      if (seconds <= 0 || isNaN(seconds)) {
-        return "0:00"; // Error
+      if (isNaN(seconds)) {
+        return "err"; // Error
       }
       const hours = Math.floor(seconds / 3600);
       const minutes = Math.floor((seconds % 3600) / 60);
@@ -133,6 +133,9 @@ function BatteryTimeItem(props: { bat: typeof Battery.AstalBatteryDevice }) {
 
     function update() {
       if(bat.charging) {
+        if (bat.time_to_full == 0){
+          return "full"
+        }
         return formatTime(bat.time_to_full)
       }
       else{
