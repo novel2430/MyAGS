@@ -2,9 +2,9 @@
 @function gtkalpha($c, $a) {
     @return string.unquote("alpha(#{$c},#{$a})");
 }
-$fg-color: #eceff4;
-$bg-color: #2e3440;
-$high-bg-color: #6e7275;
+$fg-color: #e0deda;
+$bg-color: #1c2e36;
+$high-bg-color: #637c8c;
 
 window.OSD {
 

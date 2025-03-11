@@ -1,8 +1,8 @@
 // https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
-$fg-color: #eceff4;
-$bg-color: #2e3440;
-$high-bg-color: #6e7275;
-$sec-high-bg-color: #4c566a;
+$fg-color: #e0deda;
+$bg-color: #1c2e36;
+$high-bg-color: #637c8c;
+$sec-high-bg-color: #375566;
 $urgent-bg-color: #eb6f92;
 $bor-radius: 20px;
 
@@ -19,6 +19,7 @@ window.TopBar {
       background: transparent;
       padding: 0px 0px;
       border-radius: 0px;
+      font-weight: bold;
 
       label {
         padding: 0px;
@@ -29,6 +30,7 @@ window.TopBar {
         border-radius: 0px;
         padding: 2px 8px;
         margin: 0px 0px;
+        color: $fg-color;
 
         &:hover label {
           background: inherit;
@@ -37,21 +39,30 @@ window.TopBar {
         }
       }
       .start {
+        color: $fg-color;
         border-bottom-left-radius: $bor-radius;
         border-top-left-radius: $bor-radius;
       }
       .end {
+        color: $fg-color;
         border-bottom-right-radius: $bor-radius;
         border-top-right-radius: $bor-radius;
       }
       .occupied {
+        color: $fg-color;
         background: $sec-high-bg-color;
       }
       .focused {
+        color: $fg-color;
         background: $high-bg-color;
-        font-weight: bold;
+        &:hover label {
+          background: inherit;
+          box-shadow: inset 0 -3px $fg-color;
+          font-weight: bold;
+        }
       }
       .urgent {
+        color: $fg-color;
         background: $urgent-bg-color;
       }
     }
@@ -79,7 +90,7 @@ window.TopBar {
     .BoxEnd {
       .SysTray {
         border-radius: $bor-radius;
-        background: $high-bg-color;
+        background: $sec-high-bg-color;
         padding: 2px 20px;
         margin: 0px;
         button {
