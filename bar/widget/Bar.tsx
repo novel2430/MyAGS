@@ -170,6 +170,36 @@ function BatteryItem(props: { bat: typeof Battery.AstalBatteryDevice }) {
     const { bat } = props;
     const chargingStateBinding = bind(bat, "charging");
     const percentageBinding = bind(bat, "percentage");
+    const emptyBinding = bind(bat, "time_to_empty");
+    const fullBinding = bind(bat, "time_to_full");
+
+    const timeValue = Variable<string>("");
+
+    function formatTime(seconds: number): string {
+      if (isNaN(seconds)) {
+        return "err"; // Error
+      }
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      return `${hours.toString().padStart(2, "0")}h${minutes.toString().padStart(2, "0")}m`;
+    }
+
+    function updateTime() {
+      let res = ""
+      if(bat.charging) {
+        res = formatTime(bat.time_to_full)
+        if (bat.time_to_full == 0){
+            res = "full"
+        }
+      }
+      else{
+        res = formatTime(bat.time_to_empty)
+        if (bat.time_to_empty == 0){
+            res = "full"
+        }
+      }
+      timeValue.set(res)
+    }
 
     function updateLevel() {
       let icon = "󰁹";
@@ -209,14 +239,21 @@ function BatteryItem(props: { bat: typeof Battery.AstalBatteryDevice }) {
         self.hook(percentageBinding, () => {
           self.set_label(updateLevel())
         });
+        self.hook(emptyBinding, () => {
+          updateTime()
+        });
+        self.hook(fullBinding, () => {
+          updateTime()
+        });
 
         self.toggleClassName("charging", bat.charging)
         self.set_label(updateLevel())
+        updateTime()
     }
 
     return <box className="BatteryLevel"
         visible={bind(bat, "isPresent")}>
-        <label setup={setup} />
+        <label setup={setup} tooltipText={bind(timeValue, "value")} />
     </box>
 }
 
@@ -225,7 +262,6 @@ function BatteryLevel() {
 
     return <box className="Battery" visible={bind(bat, "isPresent")}>
       <BatteryItem bat={bat} />
-      <BatteryTimeItem bat={bat}/>
     </box>
 }
 
