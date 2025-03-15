@@ -8,7 +8,7 @@ App.start({
     instanceName: "novel-ags",
     css: style,
     main() {
-        App.get_monitors().map(Bar)
+        // App.get_monitors().map(Bar)
         App.get_monitors().map(OSD)
         App.get_monitors().map(NotificationPopups)
     },
